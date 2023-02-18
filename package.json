@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "rostering",
   "version": "1.0.0",
   "description": "",
@@ -16,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/huichiaotsou/rostering/issues"
   },
-  "homepage": "https://github.com/huichiaotsou/rostering#readme"
+  "homepage": "https://github.com/huichiaotsou/rostering#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20"
+  }
 }
