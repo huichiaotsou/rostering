@@ -4,20 +4,20 @@ import mysql from "mysql";
 
 const dbCfg = config.database;
 
-// let conn = mysql.createConnection({
-//   database: dbCfg.name,
-//   host: dbCfg.host,
-//   user: dbCfg.user,
-//   password: dbCfg.password,
-// });
-
-let pool = mysql.createPool({
+const pool = mysql.createPool({
   connectionLimit: 20,
   database: dbCfg.name,
   host: dbCfg.host,
   user: dbCfg.user,
   password: dbCfg.password,
 });
+
+// const conn = mysql.createConnection({
+//   database: dbCfg.name,
+//   host: dbCfg.host,
+//   user: dbCfg.user,
+//   password: dbCfg.password,
+// });
 
 const db = {
   Query: promisify(pool.query).bind(pool),
