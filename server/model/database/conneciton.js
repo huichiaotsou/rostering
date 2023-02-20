@@ -4,7 +4,15 @@ import mysql from "mysql";
 
 const dbCfg = config.database;
 
-let conn = mysql.createConnection({
+// let conn = mysql.createConnection({
+//   database: dbCfg.name,
+//   host: dbCfg.host,
+//   user: dbCfg.user,
+//   password: dbCfg.password,
+// });
+
+let pool = mysql.createPool({
+  connectionLimit: 20,
   database: dbCfg.name,
   host: dbCfg.host,
   user: dbCfg.user,
@@ -12,10 +20,12 @@ let conn = mysql.createConnection({
 });
 
 const db = {
-  BeginTx: promisify(conn.beginTransaction).bind(conn),
-  Query: promisify(conn.query).bind(conn),
-  Commit: promisify(conn.commit).bind(conn),
-  Rollback: promisify(conn.rollback).bind(conn),
+  Query: promisify(pool.query).bind(pool),
+
+  //   BeginTx: promisify(conn.beginTransaction).bind(conn),
+  //   Query: promisify(conn.query).bind(conn),
+  //   Commit: promisify(conn.commit).bind(conn),
+  //   Rollback: promisify(conn.rollback).bind(conn),
 };
 
 export default db;

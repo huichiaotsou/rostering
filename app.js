@@ -1,6 +1,5 @@
 import express from "express";
 import config from "./config/config.js";
-import db from "./server/model/database/conneciton.js";
 
 const { port } = config.server;
 
