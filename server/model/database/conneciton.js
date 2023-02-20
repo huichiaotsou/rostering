@@ -11,16 +11,11 @@ let conn = mysql.createConnection({
   password: dbCfg.password,
 });
 
-let promiseTransaction = promisify(conn.beginTransaction).bind(conn);
-let promiseQuery = promisify(conn.query).bind(conn);
-let promiseCommit = promisify(conn.commit).bind(conn);
-let promiseRollback = promisify(conn.rollback).bind(conn);
-
 const db = {
-  Tx: promiseTransaction,
-  Query: promiseQuery,
-  Commit: promiseCommit,
-  Rollback: promiseRollback,
+  BeginTx: promisify(conn.beginTransaction).bind(conn),
+  Query: promisify(conn.query).bind(conn),
+  Commit: promisify(conn.commit).bind(conn),
+  Rollback: promisify(conn.rollback).bind(conn),
 };
 
 export default db;
