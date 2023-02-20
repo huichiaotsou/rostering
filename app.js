@@ -1,14 +1,12 @@
-import * as dotenv from "dotenv";
 import express from "express";
-dotenv.config();
+import config from "./config/config.js";
 
-// Get env variables
-const { PORT } = process.env;
+const { port } = config.server;
 
 // Build app
 const app = express();
-app.listen(PORT, () => {
-  console.log("app is listening on port: ", PORT);
+app.listen(port, () => {
+  console.log("app is listening on port: ", port);
 });
 
 // Routes
