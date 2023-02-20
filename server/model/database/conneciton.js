@@ -5,11 +5,11 @@ import mysql from "mysql";
 const dbCfg = config.database;
 
 const pool = mysql.createPool({
-  connectionLimit: 20,
   database: dbCfg.name,
   host: dbCfg.host,
   user: dbCfg.user,
   password: dbCfg.password,
+  connectionLimit: dbCfg.maxOpenConnections,
 });
 
 // const conn = mysql.createConnection({
