@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/huichiaotsou/rostering#readme",
   "dependencies": {
+    "crypto": "^1.0.1",
     "express": "^4.18.2",
     "js-yaml": "^4.1.0",
     "mysql": "^2.18.1",

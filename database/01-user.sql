@@ -13,6 +13,7 @@ CREATE TABLE user (
 );
 
 -- Define the team table to store the teams of the users: worship, sound...
+-- team is defined by the admins
 CREATE TABLE team (
     id          INT         AUTO_INCREMENT PRIMARY KEY,
     team_name   VARCHAR(50) NOT NULL
@@ -28,6 +29,7 @@ CREATE TABLE user_team (
 );
 
 -- Define the access table to store the access level along with team(s)
+-- access is defined by the admin
 CREATE TABLE access (
     id              INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     team_id         INT          NOT NULL REFERENCES team(id),
@@ -37,14 +39,16 @@ CREATE TABLE access (
 
 -- Define the func table to store the functions of the users: Vox 1, Vox 2, KB 1, MD...
 -- 1 user can take more than 1 function
+-- func list is defined by the admin
 CREATE TABLE func (
     id          INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     func_name   VARCHAR(50)  NOT NULL
 );
 
--- Define the user_func table to indicate WHO can be in charge of WHAT
+-- Define the user_func table to indicate WHO can be in charge of WHAT;
 -- 1 user can be in charge of more than 1 instrument/function
 -- (who can play what is defined by the admins)
+-- user_func is defined by the admin
 CREATE TABLE user_func (
     user_id    INT NOT NULL REFERENCES user(id),
     func_id    INT NOT NULL REFERENCES func(id),
