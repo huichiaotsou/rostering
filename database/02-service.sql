@@ -18,6 +18,16 @@ CREATE TABLE service_type (
     notes               TEXT            NOT NULL
 );
 
+-- This table stores all the services that need to be rostered;
+-- creation of coming services is periodically triggered by admins
+CREATE TABLE services (
+    id                  INT             NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    service_type_id     INT             NOT NULL REFERENCES service_type(id),
+    service_date        DATE            NOT NULL,
+
+    UNIQUE(service_type_id, servive_date)
+);
+
 -- "service_func" stores the required functions of a service,
 -- it will be used with "service_type" to generate the new schedule tables for rostering
 -- ref. rostering_sunday table
@@ -29,25 +39,3 @@ CREATE TABLE service_func (
     UNIQUE (service_type_id, func_id)
 );
 
--- This table stores all the services that need to be rostered,
--- creation of services is periodically triggered by admins
-CREATE TABLE services (
-    id                  INT             NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    service_type_id     INT             NOT NULL REFERENCES service_type(id),
-    service_date        DATE            NOT NULL,
-
-    UNIQUE(service_type_id, servive_date)
-);
-
--- This table stores the availability of volunteers
-CREATE TABLE availability (
-    user_id                 INT     NOT NULL REFERENCES user(id),
-    service_id              INT     NOT NULL REFERENCES services(id),
-);
-
-CREATE TABLE max_this_month (
-    user_id         INT     NOT NULL REFERENCES user(id),
-    year            INT     NOT NULL, -- 2023, 2024 ...
-    month           INT     NOT NULL, -- 1, 2, 3, 4, 5 ...
-    max_this_month  INT     NOT NULL
-);
