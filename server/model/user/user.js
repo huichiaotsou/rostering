@@ -1,12 +1,12 @@
-import db from "../../../database/conneciton.js";
+import Db from "../conneciton.js";
 import * as userUtils from "./utils.js";
 
 // createUser creates a user in the user table
 // zh first name, zh last name, date of birth are nullable in schema
 const createUser = async (user) => {
-  try {
-    const stmt = "INSERT INTO users SET ?";
-    const user = {
+  const stmt = "INSERT IGNORE INTO users SET ?";
+  const values = [
+    {
       first_name_en: user.firstNameEn,
       last_name_en: user.lastNameEn,
       first_name_zh: user.firstNameZh || null,
@@ -15,37 +15,43 @@ const createUser = async (user) => {
       email_verified: false,
       pwd_hash_or_token: user.googleToken || userUtils.hash(user.password),
       date_of_birth: user.dateOfBirth || null,
-      create_date: Date.now(),
-    };
-    const result = await db.Query(stmt, user);
+      create_date: new Date().toISOString().slice(0, 10),
+    },
+  ];
 
-    // return user with auto generated user_id
-    user.userID = result.insertId;
-    return user;
-  } catch (err) {
-    return err;
-  }
+  const conn = await Db.pool.getConnection();
+  const [result] = await Db.executeQuery(conn, stmt, values);
+
+  // return user with auto generated user_id
+  user.userID = result.insertId;
+  return user;
 };
 
 const getUserByEmail = async (email) => {
   const stmt = "SELECT * FROM users WHERE email = ?";
-  return await db.Query(stmt, email);
+  const values = [email];
+
+  const conn = await Db.pool.getConnection();
+  const [result] = await Db.executeQuery(conn, stmt, values);
+
+  return result;
 };
 
-// setUserTeam stores the user in user_team table
+// insertUserTeams stores the user in user_team table
 // to indicate that the user belongs to which team(s)
-const setUserTeam = async (userTeam) => {
+const insertUserTeams = async (userTeams) => {
   try {
-    const stmtUserTeam = "INSERT INTO user_teams SET ?";
-    const team = {
-      user_id: userTeam.userID,
-      team_id: userTeam.teamID,
-    };
+    const stmt = "INSERT INTO user_teams (user_id, team_id) VALUES ( ? , ? );";
+    const values = userTeams.teamIDs.map((teamID) => [
+      userTeams.userID,
+      teamID,
+    ]);
 
-    await db.Query(stmtUserTeam, team);
+    const conn = await Db.pool.getConnection();
+    await Db.executeQuery(conn, stmt, values);
   } catch (err) {
     return err;
   }
 };
 
-export { createUser, getUserByEmail, setUserTeam };
+export { createUser, getUserByEmail, insertUserTeams };

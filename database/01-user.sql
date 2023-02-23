@@ -9,7 +9,7 @@ CREATE TABLE users (
     email_verified      BOOLEAN      NOT NULL DEFAULT false,
     pwd_hash_or_token   TEXT         NOT NULL, -- password hash or OAuth login token
     date_of_birth       DATE         NULL,
-    create_date         DATE         NOT NULL,
+    create_date         DATE         NOT NULL
 );
 
 -- Define the teams table to store the teams of the users: worship, sound...
@@ -22,8 +22,8 @@ CREATE TABLE teams (
 -- Define the user_teams table to indicate WHO is in WHICH TEAM
 -- 1 user can be in more than 1 team
 CREATE TABLE user_teams (
-    user_id    INT NOT NULL REFERENCES user(id),
-    team_id    INT NOT NULL REFERENCES team(id),
+    user_id    INT NOT NULL REFERENCES users(id),
+    team_id    INT NOT NULL REFERENCES teams(id),
 
     UNIQUE (user_id, team_id)
 );
