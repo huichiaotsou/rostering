@@ -30,11 +30,14 @@ CREATE TABLE user_team (
 
 -- Define the access table to store the access level along with team(s)
 -- access is defined by the admin
-CREATE TABLE access (
-    id              INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    team_id         INT          NOT NULL REFERENCES team(id),
-    user_id         INT          NOT NULL REFERENCES user(id),
-    access_level    VARCHAR(50)  NOT NULL -- admin, leader, volunteer...
+CREATE TABLE permissions (
+    id                  INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id             INT         NOT NULL REFERENCES user(id),
+    team_id             INT         NOT NULL REFERENCES team(id),
+    permission_level    INT         NOT NULL, -- 1, 2, 3 ...
+    permission_name     VARCHAR(20) NOT NULL, -- admin, leader, volunteer...
+    
+    UNIQUE (user_id, team_id)
 );
 
 -- Define the func table to store the functions of the users: Vox 1, Vox 2, KB 1, MD...
