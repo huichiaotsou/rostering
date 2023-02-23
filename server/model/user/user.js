@@ -5,7 +5,7 @@ import * as userUtils from "./utils.js";
 // zh first name, zh last name, date of birth are nullable in schema
 const createUser = async (user) => {
   try {
-    const stmt = "INSERT INTO user SET ?";
+    const stmt = "INSERT INTO users SET ?";
     const user = {
       first_name_en: user.firstNameEn,
       last_name_en: user.lastNameEn,
@@ -36,7 +36,7 @@ const getUserByEmail = async (email) => {
 // to indicate that the user belongs to which team(s)
 const setUserTeam = async (userTeam) => {
   try {
-    const stmtUserTeam = "INSERT INTO user_team SET ?";
+    const stmtUserTeam = "INSERT INTO user_teams SET ?";
     const team = {
       user_id: userTeam.userID,
       team_id: userTeam.teamID,

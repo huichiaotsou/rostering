@@ -1,7 +1,7 @@
 // createTeam creates a team in the team table
 const createTeam = async (team) => {
   try {
-    const stmt = "INSERT INTO team SET ?";
+    const stmt = "INSERT INTO teams SET ?";
     const team = {
       team_name: team.name,
     };
@@ -15,14 +15,14 @@ const createTeam = async (team) => {
   }
 };
 
-// setUserAccess stores the access level of the user in the access table
-const setUserAccess = async (userAccess) => {
+// setUserPermission stores the access level of the user in the permission table
+const setUserPermission = async (userPermission) => {
   try {
-    const stmt = "INSERT INTO access SET ?";
+    const stmt = "INSERT INTO permissions SET ?";
     const access = {
-      team_id: userAccess.teamID,
-      user_id: userAccess.userID,
-      access_level: userAccess.accessLevel,
+      team_id: userPermission.teamID,
+      user_id: userPermission.userID,
+      access_level: userPermission.accessLevel,
     };
 
     await db.Query(stmt, access);
@@ -37,7 +37,7 @@ const createFunctions = async (functions) => {
     return;
   }
   try {
-    let stmt = "INSERT INTO func (func_name) VALUES ";
+    let stmt = "INSERT INTO functions (func_name) VALUES ";
     for (let f in functions) {
       stmt += "(?),";
     }
@@ -49,14 +49,14 @@ const createFunctions = async (functions) => {
   }
 };
 
-// setUserFuncs stores the functions of a user in the user_func table
-const setUserFuncs = async (userFuncs) => {
+// insertUserFuncs stores the functions of a user in the user_func table
+const insertUserFuncs = async (userFuncs) => {
   if (userFuncs.functions.length === 0) {
     return;
   }
 
   try {
-    let stmt = "INSERT INTO user_func (user_id, func_id) VALUES ";
+    let stmt = "INSERT INTO user_funcs (user_id, func_id) VALUES ";
     const params = [];
     for (let func of userFuncs.functions) {
       stmt += `( ? , ? ),`;
@@ -70,4 +70,4 @@ const setUserFuncs = async (userFuncs) => {
   }
 };
 
-export { createTeam, setUserAccess, createFunctions, setUserFuncs };
+export { createTeam, setUserPermission, createFunctions, insertUserFuncs };
