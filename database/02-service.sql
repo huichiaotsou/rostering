@@ -19,7 +19,7 @@ CREATE TABLE service_types (
     service_time_start  TIME            NOT NULL DEFAULT "07:00:00",
     service_time_end    TIME            NOT NULL DEFAULT "15:45:00",
 
-    team_id             INT             NOT NULL REFERENCES team(id), -- who owns the service/event
+    team_id             INT             NOT NULL REFERENCES teams(id), -- who owns the service/event
     campus_id           INT             NOT NULL REFERENCES campus(id), -- happens in which campus
     notes               TEXT            NOT NULL DEFAULT "",
 
@@ -31,8 +31,8 @@ CREATE TABLE service_types (
 -- it will be used with "service_name" to generate the new schedule tables for rostering
 -- ref. rostering_sunday table
 CREATE TABLE service_funcs (
-    service_type_id     INT         NOT NULL    REFERENCES service_type(id),
-    func_id             INT         NOT NULL    REFERENCES func(id),
+    service_type_id     INT         NOT NULL    REFERENCES service_types(id),
+    func_id             INT         NOT NULL    REFERENCES functions(id),
     is_mandatory        BOOLEAN     NOT NULL    DEFAULT true,
     
     UNIQUE (service_type_id, func_id)
@@ -40,11 +40,11 @@ CREATE TABLE service_funcs (
 
 -- This table stores all the services that need to be rostered;
 -- creation of coming services is periodically triggered by admins
-CREATE TABLE services (
+CREATE TABLE service_dates (
     id                  INT             NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    service_type_id     INT             NOT NULL REFERENCES service_type(id),
     service_date        DATE            NOT NULL,
+    service_type_id     INT             NOT NULL REFERENCES service_types(id),
     notes               TEXT            NOT NULL DEFAULT "",
 
-    UNIQUE(service_type_id, servive_date)
+    UNIQUE(service_type_id, service_date)
 );

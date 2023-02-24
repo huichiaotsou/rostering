@@ -3,7 +3,7 @@ import config from "./config/config.js";
 
 import * as User from "./server/model/user/user.js";
 import * as Admin from "./server/model/user/admin.js";
-import { func } from "promisify";
+import * as Service from "./server/model/service/service.js";
 
 const { port } = config.server;
 
@@ -31,6 +31,10 @@ app.listen(port, () => {
 // const res = await User.insertUser(user);
 // console.log(res);
 
+// *************
+//    USER
+// *************
+
 // GET USER
 const email1 = "huichiao.tsou@gmail.com";
 const email2 = "huichiao.tsou@gmail";
@@ -46,7 +50,6 @@ const userTeams = {
   userID: 1,
   teamIDs: [1, 2],
 };
-
 // await User.insertUserTeams(userTeams);
 
 // INSERT PERMISSIONS
@@ -66,12 +69,10 @@ const permissions = [
     ],
   },
 ];
-
 // await Admin.insertUserPermissions(permissions);
 
 // INSERT FUNCTIONS
 const functions = ["Vox 1", "Vox 2", "Vox 3", "EG 1", "MD"];
-
 // await Admin.insertFunctions(functions);
 
 // INSERT user_funcs
@@ -85,5 +86,53 @@ const userFuncs = [
     funcIDs: [3, 5],
   },
 ];
-
 // await Admin.insertUserFuncs(userFuncs);
+
+// *************
+//   SERVICE
+// *************
+
+// INSERT CAMPUS
+const campus = {
+  campusName: "Taipei Campus",
+};
+// await Service.insertCampus(campus);
+
+// INSERT SERVICE TYPE
+const serviceType = {
+  serviceName: "Sunday Service",
+  serviceDay: "Sunday",
+  callTime: "09:00:00",
+  callTimeDay: "Sunday",
+  preparationTime: "10:00:00",
+  preparationDay: "Saturday",
+  serviceTimeStart: "11:00:00",
+  serviceTimeEnd: "12:30:00",
+  teamID: 1,
+  campusID: 1,
+  notes: "Some notes about this service type",
+};
+// await Service.insertServiceType(serviceType);
+
+// INSERT SERVICE FUNCS
+const serviceFuncs = {
+  serviceTypeID: 7,
+  funcs: [
+    { funcID: 1, isMandatory: true },
+    { funcID: 2, isMandatory: true },
+    { funcID: 3, isMandatory: false },
+  ],
+};
+// await Service.insertServiceFuncs(serviceFuncs);
+
+// CREATE SERVICES
+const serviceDates = {
+  serviceTypeID: 7,
+  serviceDates: [
+    { serviceDate: "2023-03-01", notes: "note 1" },
+    { serviceDate: "2023-03-08", notes: "note 2" },
+    { serviceDate: "2023-03-15", notes: "note 3" },
+  ],
+};
+
+await Service.insertServiceDates(serviceDates);
