@@ -6,7 +6,7 @@ CREATE TABLE campus (
 -- This table stores different service types
 CREATE TABLE service_types (
     id                  INT             NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    service_name        VARCHAR(50)     NOT NULL UNIQUE, -- Sunday Service, Baptism, Creative Team Night, Heart and Soul
+    service_name        VARCHAR(50)     NOT NULL, -- Sunday Service, Baptism, Creative Team Night, Heart and Soul
 
     service_day         VARCHAR(20)     NOT NULL, -- Sunday, Saturday, Tuesday
     
@@ -21,7 +21,10 @@ CREATE TABLE service_types (
 
     team_id             INT             NOT NULL REFERENCES team(id), -- who owns the service/event
     campus_id           INT             NOT NULL REFERENCES campus(id), -- happens in which campus
-    notes               TEXT            NOT NULL DEFAULT ""
+    notes               TEXT            NOT NULL DEFAULT "",
+
+    -- there can be same service type but owned by different teams, e.g. Sunday Service by Worship & Sound
+    UNIQUE(service_name, team_id)
 );
 
 -- "service_funcs" stores the required functions of a service,
