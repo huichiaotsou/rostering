@@ -24,10 +24,7 @@ const insertServiceType = async (serviceType) => {
     notes: serviceType.notes,
   };
 
-  console.log(values);
-
-  let res = await Db.executeQuery(stmt, [values]);
-  console.log(res);
+  await Db.executeQuery(stmt, [values]);
 };
 
 const insertServiceFuncs = async (serviceFuncs) => {

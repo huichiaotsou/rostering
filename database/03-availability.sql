@@ -1,17 +1,9 @@
-
--- availability_slots provides a more detailed service arrangement, with slot 0 representing all slots
-CREATE TABLE availability_slots (
-    id                  INT                 NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    slot                INT                 NOT NULL,
-    slot_description    VARCHAR(255)        NOT NULL
-);
-
 -- This table stores the availabilities of volunteers for a specific service date and availability slot.
--- If sub_availability_id is 0, it means the volunteer is available for all slots.
-CREATE TABLE availabilities (
+-- service_slot_id is 1 = service_slot is all
+CREATE TABLE availability (
     user_id                 INT     NOT NULL REFERENCES user(id),
     service_date_id         INT     NOT NULL REFERENCES service_dates(id),
-    sub_availability_id     INT     NOT NULL DEFAULT 0 REFERENCES availability_slots(id)
+    service_slot_id         INT     NOT NULL REFERENCES service_slots(id)
 );
 
 -- Stores monthly max serve times for each user
