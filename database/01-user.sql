@@ -22,8 +22,11 @@ CREATE TABLE teams (
 -- Define the user_teams table to indicate WHO is in WHICH TEAM
 -- 1 user can be in more than 1 team
 CREATE TABLE user_teams (
-    user_id    INT NOT NULL REFERENCES users(id),
-    team_id    INT NOT NULL REFERENCES teams(id),
+    user_id     INT     NOT NULL REFERENCES users(id),
+    team_id     INT     NOT NULL REFERENCES teams(id),
+
+    -- notes can be used to specify the special role within the team
+    notes       TEXT    NOT NULL DEFAULT "",
 
     UNIQUE (user_id, team_id)
 );

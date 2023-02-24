@@ -21,11 +21,11 @@ CREATE TABLE service_types (
 
     team_id             INT             NOT NULL REFERENCES team(id), -- who owns the service/event
     campus_id           INT             NOT NULL REFERENCES campus(id), -- happens in which campus
-    notes               TEXT            NOT NULL
+    notes               TEXT            NOT NULL DEFAULT ""
 );
 
 -- "service_funcs" stores the required functions of a service,
--- it will be used with "service_type" to generate the new schedule tables for rostering
+-- it will be used with "service_name" to generate the new schedule tables for rostering
 -- ref. rostering_sunday table
 CREATE TABLE service_funcs (
     service_type_id     INT         NOT NULL    REFERENCES service_type(id),
@@ -35,3 +35,13 @@ CREATE TABLE service_funcs (
     UNIQUE (service_type_id, func_id)
 );
 
+-- This table stores all the services that need to be rostered;
+-- creation of coming services is periodically triggered by admins
+CREATE TABLE services (
+    id                  INT             NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    service_type_id     INT             NOT NULL REFERENCES service_type(id),
+    service_date        DATE            NOT NULL,
+    notes               TEXT            NOT NULL DEFAULT "",
+
+    UNIQUE(service_type_id, servive_date)
+);
