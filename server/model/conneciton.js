@@ -12,8 +12,10 @@ const pool = mysql.createPool({
 // executeQuery executes the sql query with the given stmt and values, along with error handling
 // returns result if success
 // returns empty array if fail or no result
-const executeQuery = async (conn, stmt, values) => {
+const executeQuery = async (stmt, values) => {
   let result = [];
+
+  const conn = await pool.getConnection();
   try {
     result = await conn.query(stmt, values);
   } catch (err) {

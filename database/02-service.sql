@@ -1,12 +1,12 @@
 CREATE TABLE campus (
     id              INT             NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    campus_name     VARCHAR(50)     NOT NULL
+    campus_name     VARCHAR(50)     NOT NULL UNIQUE
 );
 
 -- This table stores different service types
 CREATE TABLE service_types (
     id                  INT             NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    service_name        VARCHAR(50)     NOT NULL, -- Sunday Service, Baptism, Creative Team Night, Heart and Soul
+    service_name        VARCHAR(50)     NOT NULL UNIQUE, -- Sunday Service, Baptism, Creative Team Night, Heart and Soul
 
     service_day         VARCHAR(20)     NOT NULL, -- Sunday, Saturday, Tuesday
     

@@ -1,55 +1,48 @@
 import Db from "../conneciton.js";
 
-// createTeam creates a team in the team table
-const createTeam = async (team) => {
-  try {
-    const stmt = "INSERT INTO teams SET ?";
-    const values = [
-      {
-        team_name: team.name,
-      },
-    ];
-    const [result] = await Db.executeQuery(conn, stmt, values);
-
-    // return team with auto generated team_id
-    team.team_id = result.insertId;
-    return team;
-  } catch (err) {
-    return err;
-  }
+// insertTeams takes an array of teams and batch inserts them in the teams table
+const insertTeams = async (teams) => {
+  let stmt = "INSERT IGNORE INTO teams (team_name) VALUES ?";
+  await Db.executeQuery(stmt, [teams.map((t) => [t])]);
 };
 
-// setUserPermission stores the access level of the user in the permission table
-const setUserPermission = async (userPermission) => {
-  const stmt = "INSERT INTO permissions SET ?";
-  const values = [
-    {
-      team_id: userPermission.teamID,
-      user_id: userPermission.userID,
-      access_level: userPermission.accessLevel,
-    },
-  ];
+// insertUserPermissions stores the permission of the users in the permissions table
+const insertUserPermissions = async (userPermissions) => {
+  const stmt = `
+  INSERT INTO permissions 
+  (user_id, team_id, permission_name) 
+  VALUES ? 
+  ON DUPLICATE KEY 
+  UPDATE permission_name = VALUES(permission_name)`;
 
-  const conn = Db.pool.getConnection();
-  await Db.executeQuery(conn, stmt, values);
+  const values = userPermissions.reduce((acc, { userID, permissions }) => {
+    const userTeamPermSet = permissions.map((p) => [
+      userID,
+      p.teamID,
+      p.permissionName,
+    ]);
+    return acc.concat(userTeamPermSet);
+  }, []);
+
+  await Db.executeQuery(stmt, [values]);
 };
 
-// createFunctions stores the list of functions in the func table
-const createFunctions = async (functions) => {
-  const stmt = "INSERT INTO functions (func_name) VALUES (?)";
-  const values = functions;
-
-  const conn = await Db.pool.getConnection();
-  await Db.executeQuery(conn, stmt, values);
+// insertFunctions stores the list of functions in the func table
+const insertFunctions = async (functions) => {
+  let stmt = "INSERT IGNORE INTO functions (func_name) VALUES ?";
+  await Db.executeQuery(stmt, [functions.map((f) => [f])]);
 };
 
 // insertUserFuncs stores the functions of a user in the user_func table
 const insertUserFuncs = async (userFuncs) => {
-  const stmt = "INSERT INTO user_funcs (user_id, func_id) VALUES (? , ?);";
-  const values = userFuncs.funcIDs.map((u) => [userFuncs.userID, u.funcID]);
+  const stmt = "INSERT IGNORE INTO user_funcs (user_id, func_id) VALUES ?";
 
-  const conn = await Db.pool.getConnection();
-  await Db.executeQuery(conn, stmt, values);
+  const values = userFuncs.reduce((acc, { userID, funcIDs }) => {
+    const userFuncPairs = funcIDs.map((funcID) => [userID, funcID]);
+    return acc.concat(userFuncPairs);
+  }, []);
+
+  await Db.executeQuery(stmt, [values]);
 };
 
-export { createTeam, setUserPermission, createFunctions, insertUserFuncs };
+export { insertTeams, insertUserPermissions, insertFunctions, insertUserFuncs };

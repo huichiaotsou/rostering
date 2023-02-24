@@ -16,7 +16,7 @@ CREATE TABLE users (
 -- team is defined by the admins
 CREATE TABLE teams (
     id          INT         AUTO_INCREMENT PRIMARY KEY,
-    team_name   VARCHAR(50) NOT NULL
+    team_name   VARCHAR(50) NOT NULL UNIQUE
 );
 
 -- Define the user_teams table to indicate WHO is in WHICH TEAM
@@ -31,11 +31,9 @@ CREATE TABLE user_teams (
 -- Define the permissions table to store the acpermissioncess level along with team(s)
 -- permission is defined by the admin
 CREATE TABLE permissions (
-    id                  INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id             INT         NOT NULL REFERENCES user(id),
-    team_id             INT         NOT NULL REFERENCES team(id),
-    permission_level    INT         NOT NULL, -- 1, 2, 3 ...
-    permission_name     VARCHAR(20) NOT NULL, -- admin, leader, volunteer...
+    user_id             INT         NOT NULL REFERENCES users(id),
+    team_id             INT         NOT NULL REFERENCES teams(id),
+    permission_name     VARCHAR(50) NOT NULL, -- admin, leader, volunteer...
     
     UNIQUE (user_id, team_id)
 );
@@ -45,7 +43,7 @@ CREATE TABLE permissions (
 -- function list is defined by the admin
 CREATE TABLE functions (
     id          INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    func_name   VARCHAR(50)  NOT NULL
+    func_name   VARCHAR(50)  NOT NULL UNIQUE
 );
 
 -- Define the user_func table to indicate WHO can be in charge of WHAT;
@@ -53,7 +51,7 @@ CREATE TABLE functions (
 -- (who can play what is defined by the admins)
 -- user_func is defined by the admin
 CREATE TABLE user_funcs (
-    user_id    INT NOT NULL REFERENCES user(id),
+    user_id    INT NOT NULL REFERENCES users(id),
     func_id    INT NOT NULL REFERENCES functions(id),
 
     UNIQUE (user_id, func_id)
