@@ -4,6 +4,7 @@ import config from "./config/config.js";
 import * as User from "./server/model/user/user.js";
 import * as Admin from "./server/model/user/admin.js";
 import * as Service from "./server/model/service/service.js";
+import * as Availability from "./server/model/availability/availability.js";
 
 const { port } = config.server;
 
@@ -147,4 +148,24 @@ const serviceSlots = {
   ],
 };
 
-await Service.insertServiceSlots(serviceSlots);
+// await Service.insertServiceSlots(serviceSlots);
+
+// **************************
+//      AVAILABILITIES
+// **************************
+
+const userAvailabilities = {
+  userID: 1,
+  serviceDateIDs: [4, 5],
+};
+
+// await Availability.insertUserAvailabilities(userAvailabilities);
+
+const userMonthlyMax = {
+  userID: 1,
+  year: 2023,
+  month: 2, // 2 = march, starts from 0
+  monthlyMax: 3,
+};
+
+await Availability.insertUserMonthlyMax(userMonthlyMax);
