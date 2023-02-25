@@ -28,8 +28,12 @@ const insertServiceType = async (serviceType) => {
 };
 
 const insertServiceFuncs = async (serviceFuncs) => {
-  const stmt = `INSERT INTO service_funcs (service_type_id, func_id, is_mandatory) VALUES ? 
-    ON DUPLICATE KEY UPDATE is_mandatory = VALUES(is_mandatory)`;
+  const stmt = `
+  INSERT INTO service_funcs 
+  (service_type_id, func_id, is_mandatory) 
+  VALUES ? 
+  ON DUPLICATE KEY UPDATE 
+  is_mandatory = VALUES(is_mandatory)`;
 
   const values = serviceFuncs.funcs.map((f) => [
     serviceFuncs.serviceTypeID,
@@ -40,15 +44,39 @@ const insertServiceFuncs = async (serviceFuncs) => {
   await Db.executeQuery(stmt, [values]);
 };
 
-const insertServiceDates = async (services) => {
-  const { serviceTypeID, serviceDates } = services;
+const insertServiceDates = async (serviceDatesData) => {
+  const { serviceTypeID, serviceDates } = serviceDatesData;
 
-  const stmt = `INSERT INTO service_dates (service_type_id, service_date, notes) VALUES ? 
-                 ON DUPLICATE KEY UPDATE notes = VALUES(notes)`;
+  const stmt = `
+  INSERT INTO service_dates 
+  (service_type_id, service_date, notes) 
+  VALUES ? 
+  ON DUPLICATE KEY UPDATE 
+  notes = VALUES(notes)`;
+
   const values = serviceDates.map(({ serviceDate, notes }) => [
     serviceTypeID,
     serviceDate,
     notes,
+  ]);
+
+  await Db.executeQuery(stmt, [values]);
+};
+
+const insertServiceSlots = async (serviceSlotsData) => {
+  const { serviceTypeID, serviceSlots } = serviceSlotsData;
+
+  const stmt = `
+  INSERT INTO service_slots 
+  (service_type_id, service_slot, notes) 
+  VALUES ? 
+  ON DUPLICATE KEY UPDATE 
+  notes=VALUES(notes)
+  `;
+  const values = serviceSlots.map((slot) => [
+    serviceTypeID,
+    slot.serviceSlot,
+    slot.notes,
   ]);
 
   await Db.executeQuery(stmt, [values]);
@@ -59,4 +87,5 @@ export {
   insertServiceType,
   insertServiceFuncs,
   insertServiceDates,
+  insertServiceSlots,
 };

@@ -125,7 +125,7 @@ const serviceFuncs = {
 };
 // await Service.insertServiceFuncs(serviceFuncs);
 
-// CREATE SERVICES
+// CREATE SERVICE DATES
 const serviceDates = {
   serviceTypeID: 7,
   serviceDates: [
@@ -135,4 +135,16 @@ const serviceDates = {
   ],
 };
 
-await Service.insertServiceDates(serviceDates);
+// await Service.insertServiceDates(serviceDates);
+
+// CREATE SERVICE SLOTS
+const serviceSlots = {
+  serviceTypeID: 7,
+  serviceSlots: [
+    { serviceSlot: "09:30", notes: "note 1" },
+    { serviceSlot: "11:30", notes: "note 2" },
+    { serviceSlot: "14:00", notes: "note 3" },
+  ],
+};
+
+await Service.insertServiceSlots(serviceSlots);

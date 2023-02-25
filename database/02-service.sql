@@ -50,7 +50,6 @@ CREATE TABLE service_dates (
 );
 
 -- creation of service slots should be triggered by the creation of service_dates
--- id:1 = service_slot:all
 CREATE TABLE service_slots (
     id                  INT             NOT NULL AUTO_INCREMENT PRIMARY KEY,
     service_slot        VARCHAR(255)    NOT NULL,
@@ -58,5 +57,5 @@ CREATE TABLE service_slots (
 
     notes               TEXT            NOT NULL DEFAULT "",
 
-    UNIQUE(service_type_id, slot)
+    UNIQUE(service_type_id, service_slot)
 );

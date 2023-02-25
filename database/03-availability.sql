@@ -1,5 +1,4 @@
 -- This table stores the availabilities of volunteers for a specific service date and availability slot.
--- service_slot_id is 1 = service_slot is all
 CREATE TABLE availability (
     user_id                 INT     NOT NULL REFERENCES user(id),
     service_date_id         INT     NOT NULL REFERENCES service_dates(id),
